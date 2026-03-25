@@ -30,6 +30,11 @@
       // Przykładowy wiersz danych (LAB) — w produkcji: fetch do backendu / analytics
       var line = 'email: ' + email + ' | rejestracja: ' + vehicle + ' | rola: ' + roleLabel;
       console.log('[poBilet signup]', line);
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'signup_submit',
+        signup_role: role || 'unknown',
+      });
       alert('Dziękujemy! (demo)\n\n' + line);
       form.reset();
     });

@@ -29,7 +29,7 @@
         if (!ctaMain) return;
 
         if (variant === 'B') {
-            ctaMain.textContent = 'Kup bilet w 30 sekund';
+            ctaMain.textContent = 'Zacznij teraz';
             return;
         }
         ctaMain.textContent = 'Wypróbuj za darmo';

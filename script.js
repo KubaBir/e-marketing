@@ -4,6 +4,41 @@
         window.dataLayer.push(obj);
     }
 
+    function getAbVariant() {
+        var key = 'ab_variant';
+        var variant;
+        try {
+            variant = localStorage.getItem(key);
+        } catch (err) {
+            variant = null;
+        }
+
+        if (variant !== 'A' && variant !== 'B') {
+            variant = Math.random() < 0.5 ? 'A' : 'B';
+            try {
+                localStorage.setItem(key, variant);
+            } catch (err) {
+                // brak dostępu do localStorage
+            }
+        }
+        return variant;
+    }
+
+    function applyAbVariant(variant) {
+        var ctaMain = document.getElementById('cta-main');
+        if (!ctaMain) return;
+
+        if (variant === 'B') {
+            ctaMain.textContent = 'Zacznij teraz';
+            return;
+        }
+        ctaMain.textContent = 'Wypróbuj za darmo';
+    }
+
+    var abVariant = getAbVariant();
+    applyAbVariant(abVariant);
+    pushDL({ event: 'ab_impression', variant: abVariant });
+
     var path = (typeof location !== 'undefined' && location.pathname) || '';
     if (path.indexOf('pricing.html') !== -1) {
         pushDL({ event: 'pricing_view' });
@@ -31,7 +66,7 @@
             if (!el) return;
             var label = el.getAttribute('data-gtm-cta');
             if (!label) return;
-            pushDL({ event: 'cta_click', cta_label: label });
+            pushDL({ event: 'cta_click', cta_label: label, variant: abVariant });
         },
         true
     );
@@ -70,6 +105,7 @@
                 event: 'form_submit',
                 form_id: 'signup',
                 signup_role: role || 'unknown',
+                variant: abVariant,
             });
             alert('Dziękujemy! (demo)\n\n' + line);
             form.reset();
